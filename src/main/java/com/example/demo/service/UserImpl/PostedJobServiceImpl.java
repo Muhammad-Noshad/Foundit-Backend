@@ -23,4 +23,9 @@ public class PostedJobServiceImpl implements PostedJobService {
     public Optional<PostedJob> getPostedJobById(Integer id) {
         return postedJobRepository.findById(id);
     }
+
+    @Override
+    public List<PostedJob> findPostedJobByCompanyId(Integer companyId) {
+        return postedJobRepository.findPostedJobByCompany_CompanyId(companyId);
+    }
 }

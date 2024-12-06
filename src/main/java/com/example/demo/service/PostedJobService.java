@@ -11,4 +11,6 @@ public interface PostedJobService {
     List<PostedJob> getAllPostedJobs();
 
     Optional<PostedJob> getPostedJobById(Integer id);
+
+    List<PostedJob> findPostedJobByCompanyId(Integer companyId);
 }
