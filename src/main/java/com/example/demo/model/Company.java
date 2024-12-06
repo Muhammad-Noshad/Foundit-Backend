@@ -36,6 +36,16 @@ public class Company {
     @JoinColumn(name = "UserId", nullable = false)
     private User user;
 
+    public Company() {
+    }
+
+    public Company(String companyName, String companyLocation, String companyLogo, String positionInCompany) {
+        this.companyName = companyName;
+        this.companyLocation = companyLocation;
+        this.companyLogo = companyLogo;
+        this.positionInCompany = positionInCompany;
+    }
+
     public Integer getCompanyId() {
         return companyId;
     }

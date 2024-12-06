@@ -40,6 +40,9 @@ public class PostedJob {
     @Column(name = "CreationDate", nullable = false, updatable = false)
     private LocalDateTime creationDate = LocalDateTime.now();
 
+    public PostedJob() {
+    }
+
     public Integer getJobId() {
         return jobId;
     }

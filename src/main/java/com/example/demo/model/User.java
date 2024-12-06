@@ -49,6 +49,17 @@ public class User {
     @Valid
     private Set<JobApplication> jobApplications;
 
+    public User() {
+    }
+
+    public User(String firstName, String lastName, String email, String password, Role role) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+    }
+
     public Integer getUserId() { return userId; }
     public void setUserId(Integer userId) { this.userId = userId; }
     public String getFirstName() { return firstName; }
@@ -61,9 +72,4 @@ public class User {
     public void setPassword(String password) { this.password = password; }
     public Role getRole() { return role; }
     public void setRole(Role role) { this.role = role; }
-}
-
-enum Role {
-    JobSeeker,
-    Employer
 }
