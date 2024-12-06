@@ -6,6 +6,8 @@ import com.example.demo.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class CompanyServiceImpl implements CompanyService {
     @Autowired
@@ -14,5 +16,10 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public void addCompany(Company company) {
         companyRepository.save(company);
+    }
+
+    @Override
+    public Optional<Company> getCompanyByUserId(Integer userId) {
+        return companyRepository.findByUser_UserId(userId);
     }
 }
