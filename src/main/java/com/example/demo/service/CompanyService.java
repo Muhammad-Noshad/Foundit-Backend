@@ -10,4 +10,6 @@ public interface CompanyService {
     void addCompany(Company company);
 
     Optional<Company> getCompanyByUserId(Integer userId);
+
+    Optional<Company> findByCompanyNameAndCompanyLocation(String companyName, String companyLocation);
 }

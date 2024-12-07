@@ -100,8 +100,3 @@ public class PostedJob {
     }
 }
 
-enum JobType {
-    FullTime,
-    PartTime
-}
-

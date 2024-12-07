@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
@@ -47,7 +48,9 @@ public class AuthController {
     }
 
     @PostMapping("/sign-up/job-seeker")
-    public ResponseEntity<Body> jobSeekerSignUp(@Valid @RequestBody User user) {
+    public ResponseEntity<Body> jobSeekerSignUp(@RequestBody Map<String, String> userMap) {
+        User user = new User(userMap.get("firstName"), userMap.get("lastName"), userMap.get("email"), userMap.get("password"), Role.JobSeeker);
+
         if (userService.existsByEmail(user.getEmail())) {
             return new ResponseEntity<>(new Body("User already exists!"), HttpStatus.CONFLICT);
         }
@@ -86,10 +89,18 @@ public class AuthController {
 
         User user = new User(userInfoMap.get("firstName"), userInfoMap.get("lastName"), userInfoMap.get("email"), userInfoMap.get("password"), Role.Employer);
         Company company = new Company(companyInfoMap.get("companyName"), companyInfoMap.get("companyLocation"), companyLogoUrl, companyInfoMap.get("positionInCompany"));
-        company.setUser(user);
+
+        Optional<Company> companyExists = companyService.findByCompanyNameAndCompanyLocation(company.getCompanyName(), company.getCompanyLocation());
+
+        if(companyExists.isEmpty()){
+            companyService.addCompany(company);
+            user.setCompany(company);
+        }
+        else {
+            user.setCompany(companyExists.get());
+        }
 
         userService.addUser(user);
-        companyService.addCompany(company);
 
         return new ResponseEntity<>(new Body("User sign up successful!"), HttpStatus.CREATED);
     }

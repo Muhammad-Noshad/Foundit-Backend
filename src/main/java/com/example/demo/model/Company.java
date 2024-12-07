@@ -1,8 +1,11 @@
 package com.example.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+
+import java.util.Set;
 
 @Entity
 @Table(name = "Company")
@@ -32,9 +35,9 @@ public class Company {
     @Size(max = 50, message = "Position in company can't exceed 50 characters")
     private String positionInCompany;
 
-    @ManyToOne
-    @JoinColumn(name = "UserId", nullable = false)
-    private User user;
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonBackReference
+    private Set<User> users;
 
     public Company() {
     }
@@ -86,11 +89,7 @@ public class Company {
         this.positionInCompany = positionInCompany;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
+    public Set<User> getUsers() {
+        return users;
     }
 }
