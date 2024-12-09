@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.model.JobApplication;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,4 +18,5 @@ public interface JobApplicationService {
     boolean jobApplicationExistsById(Integer jobApplicationId);
 
     void deleteJobApplicationById(Integer jobApplicationId);
+    List<JobApplication> getJobApplicationsByJobPostId(Integer jobPostId);
 }

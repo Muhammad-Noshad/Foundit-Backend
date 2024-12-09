@@ -6,6 +6,7 @@ import com.example.demo.model.ApplicationStatus;
 import com.example.demo.model.JobApplication;
 import com.example.demo.model.PostedJob;
 import com.example.demo.model.User;
+import com.example.demo.service.CompanyService;
 import com.example.demo.service.JobApplicationService;
 import com.example.demo.service.PostedJobService;
 import com.example.demo.service.UserService;
@@ -70,6 +71,12 @@ public class JobApplicationController {
     @GetMapping("/{userId}")
     public ResponseEntity<?> getJobApplicationsByUserId(@PathVariable Integer userId) {
         List<JobApplication> jobApplications = jobApplicationService.getJobApplicationsByUserId(userId);
+        return new ResponseEntity<>(jobApplications, HttpStatus.OK);
+    }
+
+    @GetMapping("job-post/{jobPostId}")
+    public ResponseEntity<?> getJobApplicationsByJobPostId(@PathVariable Integer jobPostId) {
+        List<JobApplication> jobApplications = jobApplicationService.getJobApplicationsByJobPostId(jobPostId);
         return new ResponseEntity<>(jobApplications, HttpStatus.OK);
     }
 

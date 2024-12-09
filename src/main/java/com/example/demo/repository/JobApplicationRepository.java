@@ -16,4 +16,6 @@ public interface JobApplicationRepository extends JpaRepository<JobApplication, 
             "FROM JobApplication j " +
             "WHERE j.user.userId = :userId AND j.postedJob.jobId = :jobId")
     boolean existsByUserAndJob(@Param("userId") Integer userId, @Param("jobId") Integer jobId);
+
+    List<JobApplication> findByPostedJob_JobId(Integer postedJobId);
 }

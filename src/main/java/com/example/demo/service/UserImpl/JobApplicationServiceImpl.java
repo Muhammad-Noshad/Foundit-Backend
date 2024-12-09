@@ -39,4 +39,9 @@ public class JobApplicationServiceImpl implements JobApplicationService {
     public void deleteJobApplicationById(Integer jobApplicationId) {
         jobApplicationRepository.deleteById(jobApplicationId);
     }
+
+    @Override
+    public List<JobApplication> getJobApplicationsByJobPostId(Integer jobPostId) {
+        return null;
+    }
 }

@@ -27,4 +27,9 @@ public class CompanyServiceImpl implements CompanyService {
     public Optional<Company> findByCompanyNameAndCompanyLocation(String companyName, String companyLocation) {
         return companyRepository.findByCompanyNameAndCompanyLocation(companyName, companyLocation);
     }
+
+    @Override
+    public boolean existsById(Integer companyId) {
+        return companyRepository.existsById(companyId);
+    }
 }

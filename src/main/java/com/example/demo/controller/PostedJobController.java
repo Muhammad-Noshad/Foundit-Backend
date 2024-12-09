@@ -10,9 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:5173")
@@ -30,17 +28,9 @@ public class PostedJobController {
         return new ResponseEntity<>(postedJobs, HttpStatus.OK);
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<?> getPostedJobsById(@PathVariable Integer userId) {
-        System.out.println(userId);
-        Optional<Company> company = companyService.getCompanyByUserId(userId);
-
-        if(company.isEmpty()) {
-            return new ResponseEntity<>(new Body("User's company not found!"), HttpStatus.NOT_FOUND);
-        }
-
-        List<PostedJob> postedJobs = postedJobService.findPostedJobByCompanyId(company.get().getCompanyId());
-
+    @GetMapping("/{companyId}")
+    public ResponseEntity<?> getPostedJobsByCompanyId(@PathVariable Integer companyId) {
+        List<PostedJob> postedJobs = postedJobService.findPostedJobByCompanyId(companyId);
         return new ResponseEntity<>(postedJobs, HttpStatus.OK);
     }
 }

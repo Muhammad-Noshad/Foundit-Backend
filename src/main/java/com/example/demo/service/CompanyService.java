@@ -12,4 +12,6 @@ public interface CompanyService {
     Optional<Company> getCompanyByUserId(Integer userId);
 
     Optional<Company> findByCompanyNameAndCompanyLocation(String companyName, String companyLocation);
+
+    boolean existsById(Integer companyId);
 }
