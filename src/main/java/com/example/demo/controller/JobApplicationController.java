@@ -6,7 +6,6 @@ import com.example.demo.model.ApplicationStatus;
 import com.example.demo.model.JobApplication;
 import com.example.demo.model.PostedJob;
 import com.example.demo.model.User;
-import com.example.demo.service.CompanyService;
 import com.example.demo.service.JobApplicationService;
 import com.example.demo.service.PostedJobService;
 import com.example.demo.service.UserService;
@@ -22,7 +21,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/job-application")
 public class JobApplicationController {
