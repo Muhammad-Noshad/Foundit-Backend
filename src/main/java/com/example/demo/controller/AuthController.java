@@ -47,9 +47,7 @@ public class AuthController {
     }
 
     @PostMapping("/sign-up/job-seeker")
-    public ResponseEntity<Body> jobSeekerSignUp(@RequestBody Map<String, String> userMap) {
-        User user = new User(userMap.get("firstName"), userMap.get("lastName"), userMap.get("email"), userMap.get("password"), Role.JobSeeker);
-
+    public ResponseEntity<Body> jobSeekerSignUp(@RequestBody @Valid User user) {
         if (userService.existsByEmail(user.getEmail())) {
             return new ResponseEntity<>(new Body("User already exists!"), HttpStatus.CONFLICT);
         }

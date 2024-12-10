@@ -19,11 +19,6 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public Optional<Company> getCompanyByUserId(Integer userId) {
-        return companyRepository.findByUsers_UserId(userId);
-    }
-
-    @Override
     public Optional<Company> findByCompanyNameAndCompanyLocation(String companyName, String companyLocation) {
         return companyRepository.findByCompanyNameAndCompanyLocation(companyName, companyLocation);
     }

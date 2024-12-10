@@ -9,8 +9,6 @@ import java.util.Optional;
 public interface CompanyService {
     void addCompany(Company company);
 
-    Optional<Company> getCompanyByUserId(Integer userId);
-
     Optional<Company> findByCompanyNameAndCompanyLocation(String companyName, String companyLocation);
 
     boolean existsById(Integer companyId);
