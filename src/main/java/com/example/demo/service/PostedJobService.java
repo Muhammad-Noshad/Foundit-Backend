@@ -15,4 +15,8 @@ public interface PostedJobService {
     List<PostedJob> findPostedJobByCompanyId(Integer companyId);
 
     void addJobPost(PostedJob postedJob);
+
+    boolean postedJobExistsById(Integer id);
+
+    void deletePostedJobById(Integer id);
 }

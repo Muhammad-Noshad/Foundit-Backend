@@ -33,4 +33,14 @@ public class PostedJobServiceImpl implements PostedJobService {
     public void addJobPost(PostedJob postedJob) {
         postedJobRepository.save(postedJob);
     }
+
+    @Override
+    public boolean postedJobExistsById(Integer id) {
+        return postedJobRepository.existsById(id);
+    }
+
+    @Override
+    public void deletePostedJobById(Integer id) {
+        postedJobRepository.deleteById(id);
+    }
 }

@@ -6,7 +6,6 @@ import com.example.demo.service.PostedJobService;
 import com.example.demo.utils.Body;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,5 +36,16 @@ public class PostedJobController {
     public ResponseEntity<?> addPostedJob(@RequestBody @Valid PostedJob postedJob) {
         postedJobService.addJobPost(postedJob);
         return new ResponseEntity<>(new Body("Job created successfully!"), HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/{jobId}")
+    public ResponseEntity<?> deletePostedJobById(@PathVariable Integer jobId) {
+        if(!postedJobService.postedJobExistsById(jobId)) {
+            return new ResponseEntity<>(new Body("Posted Job does not exist!"), HttpStatus.NOT_FOUND);
+        }
+
+        postedJobService.deletePostedJobById(jobId);
+
+        return new ResponseEntity<>(new Body("Posted Job deleted successfully!"), HttpStatus.NO_CONTENT);
     }
 }
