@@ -1,4 +1,4 @@
-package com.example.demo.service.UserImpl;
+package com.example.demo.service.Impl;
 
 import com.example.demo.model.JobApplication;
 import com.example.demo.repository.JobApplicationRepository;
@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class JobApplicationServiceImpl implements JobApplicationService {
