@@ -41,6 +41,6 @@ public class JobApplicationServiceImpl implements JobApplicationService {
 
     @Override
     public List<JobApplication> getJobApplicationsByJobPostId(Integer jobPostId) {
-        return null;
+        return jobApplicationRepository.findByPostedJob_JobId(jobPostId);
     }
 }
