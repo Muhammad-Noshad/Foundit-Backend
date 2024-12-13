@@ -61,7 +61,7 @@ public class JobApplicationController {
         JobApplication jobApplication = new JobApplication(user.get(), postedJob.get(), cvUrl, additionalComments, "",
                 ApplicationStatus.Applied);
 
-        jobApplicationService.addJobApplication(jobApplication);
+        jobApplicationService.saveJobApplication(jobApplication);
 
         return new ResponseEntity<>(new Body("Job applied successfully!"), HttpStatus.CREATED);
     }
@@ -87,5 +87,26 @@ public class JobApplicationController {
         jobApplicationService.deleteJobApplicationById(jobApplicationId);
 
         return new ResponseEntity<>(new Body("Job Application deleted successfully!"), HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping("/update-status")
+    public ResponseEntity<?> updateJobApplicationStatus(@RequestBody Map<String, String> body) {
+        if(!jobApplicationService.jobApplicationExistsById(Integer.parseInt(body.get("jobApplicationId")))) {
+            return new ResponseEntity<>(new Body("Job Application does not exist!"), HttpStatus.NOT_FOUND);
+        }
+
+        Optional<JobApplication> jobApplication = jobApplicationService.getJobApplicationById(Integer.parseInt(body.get("jobApplicationId")));
+
+        jobApplication.get().setEmployerComment(body.get("additionalComments"));
+        if(body.get("applicationStatus").equals("Approved")) {
+            jobApplication.get().setStatus(ApplicationStatus.Approved);
+        }
+        else {
+            jobApplication.get().setStatus(ApplicationStatus.Rejected);
+        }
+
+        jobApplicationService.saveJobApplication(jobApplication.get());
+
+        return new ResponseEntity<>(new Body("Application Status updated successfully!"), HttpStatus.OK);
     }
 }
