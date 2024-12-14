@@ -52,7 +52,7 @@ public class AuthController {
             return new ResponseEntity<>(new Body("User already exists!"), HttpStatus.CONFLICT);
         }
 
-        userService.addUser(user);
+        userService.saveUser(user);
         return new ResponseEntity<>(new Body("User sign up successful!"), HttpStatus.CREATED);
     }
 
@@ -90,14 +90,14 @@ public class AuthController {
         Optional<Company> companyExists = companyService.findByCompanyNameAndCompanyLocation(company.getCompanyName(), company.getCompanyLocation());
 
         if(companyExists.isEmpty()){
-            companyService.addCompany(company);
+            companyService.saveCompany(company);
             user.setCompany(company);
         }
         else {
             user.setCompany(companyExists.get());
         }
 
-        userService.addUser(user);
+        userService.saveUser(user);
 
         return new ResponseEntity<>(new Body("User sign up successful!"), HttpStatus.CREATED);
     }

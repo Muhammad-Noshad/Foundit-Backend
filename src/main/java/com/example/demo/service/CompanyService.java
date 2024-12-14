@@ -7,7 +7,7 @@ import java.util.Optional;
 
 @Service
 public interface CompanyService {
-    void addCompany(Company company);
+    void saveCompany(Company company);
 
     Optional<Company> findByCompanyNameAndCompanyLocation(String companyName, String companyLocation);
 

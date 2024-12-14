@@ -9,11 +9,13 @@ import java.util.Optional;
 public interface UserService {
     Optional<User> getUserById(Integer id);
 
-    void addUser(User user);
+    void saveUser(User user);
 
     boolean existsByEmail(String email);
 
     boolean verifyUser(String email, String password);
 
     User findByEmail(String email);
+
+    boolean userExistsById(Integer userId);
 }
