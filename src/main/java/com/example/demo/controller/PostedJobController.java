@@ -34,7 +34,7 @@ public class PostedJobController {
 
     @PostMapping
     public ResponseEntity<?> addPostedJob(@RequestBody @Valid PostedJob postedJob) {
-        postedJobService.addJobPost(postedJob);
+        postedJobService.saveJobPost(postedJob);
         return new ResponseEntity<>(new Body("Job created successfully!"), HttpStatus.CREATED);
     }
 

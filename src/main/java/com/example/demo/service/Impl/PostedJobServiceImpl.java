@@ -30,7 +30,7 @@ public class PostedJobServiceImpl implements PostedJobService {
     }
 
     @Override
-    public void addJobPost(PostedJob postedJob) {
+    public void saveJobPost(PostedJob postedJob) {
         postedJobRepository.save(postedJob);
     }
 

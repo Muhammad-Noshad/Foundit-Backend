@@ -91,11 +91,11 @@ public class JobApplicationController {
 
     @PostMapping("/update-status")
     public ResponseEntity<?> updateJobApplicationStatus(@RequestBody Map<String, String> body) {
-        if(!jobApplicationService.jobApplicationExistsById(Integer.parseInt(body.get("jobApplicationId")))) {
+        Optional<JobApplication> jobApplication = jobApplicationService.getJobApplicationById(Integer.parseInt(body.get("jobApplicationId")));
+
+        if(jobApplication.isEmpty()) {
             return new ResponseEntity<>(new Body("Job Application does not exist!"), HttpStatus.NOT_FOUND);
         }
-
-        Optional<JobApplication> jobApplication = jobApplicationService.getJobApplicationById(Integer.parseInt(body.get("jobApplicationId")));
 
         jobApplication.get().setEmployerComment(body.get("additionalComments"));
         if(body.get("applicationStatus").equals("Approved")) {
