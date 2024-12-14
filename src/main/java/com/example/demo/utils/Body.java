@@ -1,7 +1,5 @@
 package com.example.demo.utils;
 
-import org.springframework.stereotype.Service;
-
 public class Body {
     private String message;
 

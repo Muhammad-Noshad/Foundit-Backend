@@ -44,7 +44,7 @@ public class UserController {
     @PostMapping
     public ResponseEntity<?> editUser(
             @RequestPart("user") String userInfoString,
-            @RequestPart("company") String companyInfoString,
+            @RequestPart(value = "company", required = false) String companyInfoString,
             @RequestPart(value = "companyLogo", required = false) MultipartFile companyLogo
     ) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -54,8 +54,10 @@ public class UserController {
         try {
             userInfoMap = objectMapper.readValue(userInfoString, new TypeReference<>() {
             });
+            if(!(companyInfoString == null)) {
             companyInfoMap = objectMapper.readValue(companyInfoString, new TypeReference<>() {
             });
+            }
 
         }
         catch (IOException e) {
@@ -67,7 +69,7 @@ public class UserController {
             return new ResponseEntity<>(new Body("User not found!"), HttpStatus.NOT_FOUND);
         }
 
-        if(!companyService.existsById(Integer.parseInt(companyInfoMap.get("companyId")))) {
+        if(!(companyInfoString == null) && !companyService.existsById(Integer.parseInt(companyInfoMap.get("companyId")))) {
             return new ResponseEntity<>(new Body("User's company not found!"), HttpStatus.NOT_FOUND);
         }
 
@@ -80,12 +82,15 @@ public class UserController {
         User user = new User(userInfoMap.get("firstName"), userInfoMap.get("lastName"), userInfoMap.get("email"), userInfoMap.get("password"), userInfoMap.get("role").equals("Employer")? Role.Employer: Role.JobSeeker);
         user.setUserId(Integer.parseInt(userInfoMap.get("userId")));
 
-        Company company = new Company(companyInfoMap.get("companyName"), companyInfoMap.get("companyLocation"), companyLogoUrl.isBlank()? companyInfoMap.get("companyLogo"): companyLogoUrl , companyInfoMap.get("positionInCompany"));
-        company.setCompanyId(Integer.parseInt(companyInfoMap.get("companyId")));
+        Company company = null;
 
-        user.setCompany(company);
+        if(!(companyInfoString == null)) {
+            company = new Company(companyInfoMap.get("companyName"), companyInfoMap.get("companyLocation"), companyLogoUrl.isBlank()? companyInfoMap.get("companyLogo"): companyLogoUrl , companyInfoMap.get("positionInCompany"));
+            company.setCompanyId(Integer.parseInt(companyInfoMap.get("companyId")));
+            user.setCompany(company);
+            companyService.saveCompany(company);
+        }
 
-        companyService.saveCompany(company);
         userService.saveUser(user);
 
         return new ResponseEntity<>(new Body("User edited successfully!"), HttpStatus.OK);
