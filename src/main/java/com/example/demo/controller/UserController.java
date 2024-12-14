@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/user")
@@ -28,6 +29,17 @@ public class UserController {
     private CompanyService companyService;
     @Autowired
     private Cloudinary cloudinary;
+
+    @GetMapping("/{userId}")
+    private ResponseEntity<?> getUserById(@PathVariable Integer userId) {
+        Optional<User> user = userService.getUserById(userId);
+
+        if(user.isEmpty()) {
+            return new ResponseEntity<>(new Body("User not found!"), HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(user.get(), HttpStatus.OK);
+    }
 
     @PostMapping
     public ResponseEntity<?> editUser(
