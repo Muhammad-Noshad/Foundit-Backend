@@ -71,6 +71,13 @@
 			<artifactId>cloudinary-taglib</artifactId>
 			<version>2.0.0</version>
 		</dependency>
+
+		<!-- Send in blue for sending emails -->
+		<dependency>
+			<groupId>com.sendinblue</groupId>
+			<artifactId>sib-api-v3-sdk</artifactId>
+			<version>7.0.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
