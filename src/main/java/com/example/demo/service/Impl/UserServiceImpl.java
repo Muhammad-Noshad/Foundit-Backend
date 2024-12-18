@@ -43,4 +43,9 @@ public class UserServiceImpl implements UserService {
     public boolean userExistsById(Integer userId) {
         return userRepository.existsById(userId);
     }
+
+    @Override
+    public Optional<User> getUserByCompanyId(Integer companyId) {
+        return userRepository.findByCompany_CompanyId(companyId);
+    }
 }
