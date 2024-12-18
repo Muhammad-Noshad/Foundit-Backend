@@ -18,4 +18,6 @@ public interface UserService {
     User findByEmail(String email);
 
     boolean userExistsById(Integer userId);
+
+    Optional<User> getUserByCompanyId(Integer companyId);
 }
