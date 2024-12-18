@@ -9,14 +9,17 @@ import com.example.demo.model.User;
 import com.example.demo.service.CompanyService;
 import com.example.demo.service.UserService;
 import com.example.demo.utils.Body;
+import com.example.demo.utils.JwtUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import jakarta.servlet.http.Cookie;
 
 import java.io.IOException;
 import java.util.Map;
@@ -32,18 +35,33 @@ public class AuthController {
     @Autowired
     private Cloudinary cloudinary;
 
+    @Autowired
+    JwtUtil jwtUtil;
+
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody @Valid LoginRequest loginRequest) {
+    public ResponseEntity<?> login(@RequestBody @Valid LoginRequest loginRequest, HttpServletResponse response) {
         if(!userService.existsByEmail(loginRequest.getEmail())){
             return new ResponseEntity<>(new Body("User not found!"), HttpStatus.NOT_FOUND);
         }
 
-        if (userService.verifyUser(loginRequest.getEmail(), loginRequest.getPassword())) {
-            User user = userService.findByEmail(loginRequest.getEmail());
-            return new ResponseEntity<>(user, HttpStatus.OK);
+        if (!userService.verifyUser(loginRequest.getEmail(), loginRequest.getPassword())) {
+            return new ResponseEntity<>(new Body("Invalid email or password."), HttpStatus.UNAUTHORIZED);
         }
 
-        return new ResponseEntity<>(new Body("Invalid email or password."), HttpStatus.UNAUTHORIZED);
+        User user = userService.findByEmail(loginRequest.getEmail());
+
+        String token = jwtUtil.generateToken(user.getEmail(), user.getPassword());
+
+        Cookie cookie = new Cookie("foundit_jwt", token);
+        cookie.setHttpOnly(true);
+        // Won't work for HTTP connections like localhost, only enable it after deployment
+        // cookie.setSecure(true);
+        cookie.setPath("/");
+        cookie.setMaxAge((int) jwtUtil.getExpirationTime());
+
+        response.addCookie(cookie);
+
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @PostMapping("/sign-up/job-seeker")

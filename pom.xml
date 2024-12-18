@@ -41,6 +41,19 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- Spring Boot Security for authentication and authorization -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+
+		<!-- JWT library for generating and validating JWT tokens -->
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>0.12.6</version>
+		</dependency>
+
 		<!-- Spring Boot Starter Validation for bean validation -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
