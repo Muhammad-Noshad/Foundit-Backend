@@ -9,6 +9,7 @@ import com.example.demo.model.User;
 import com.example.demo.service.CompanyService;
 import com.example.demo.service.UserService;
 import com.example.demo.utils.Body;
+import com.example.demo.utils.CookieUtil;
 import com.example.demo.utils.JwtUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -52,15 +53,7 @@ public class AuthController {
         User user = userService.findByEmail(loginRequest.getEmail());
 
         String token = jwtUtil.generateToken(user.getEmail(), user.getPassword());
-
-        Cookie cookie = new Cookie(JwtUtil.TOKEN_NAME, token);
-        cookie.setHttpOnly(true);
-        // Won't work for HTTP connections like localhost, only enable it after deployment
-        // cookie.setSecure(true);
-        cookie.setPath("/");
-        cookie.setMaxAge((int) jwtUtil.getExpirationTime());
-
-        response.addCookie(cookie);
+        CookieUtil.addCookie(response, JwtUtil.TOKEN_NAME, token);
 
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
@@ -123,7 +116,7 @@ public class AuthController {
 
     @GetMapping("/verify")
     public ResponseEntity<?> verifyUser(HttpServletRequest request) {
-        String token = jwtUtil.getTokenFromCookies(request);
+        String token = CookieUtil.getCookieValue(request, JwtUtil.TOKEN_NAME);
 
         if(token == null) {
             return new ResponseEntity<>(new Body("Token not found!"), HttpStatus.NO_CONTENT);
@@ -147,13 +140,7 @@ public class AuthController {
 
     @DeleteMapping("/logout")
     public ResponseEntity<?> logout(HttpServletResponse response) {
-        Cookie cookie = new Cookie(JwtUtil.TOKEN_NAME, null);
-        cookie.setMaxAge(0);
-        cookie.setPath("/");
-        cookie.setHttpOnly(true);
-        cookie.setSecure(true);
-
-        response.addCookie(cookie);
+        CookieUtil.deleteCookie(response, JwtUtil.TOKEN_NAME);
 
         return new ResponseEntity<>(new Body("Token deleted successfully!"), HttpStatus.OK);
     }

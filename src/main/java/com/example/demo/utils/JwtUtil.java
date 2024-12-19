@@ -60,15 +60,4 @@ public class JwtUtil {
     public long getExpirationTime() {
         return EXPIRATION_TIME;
     }
-
-    public String getTokenFromCookies(HttpServletRequest request) {
-        if (request.getCookies() != null) {
-            for (Cookie cookie : request.getCookies()) {
-                if (TOKEN_NAME.equals(cookie.getName())) {
-                    return cookie.getValue();
-                }
-            }
-        }
-        return null;
-    }
 }

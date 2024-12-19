@@ -1,4 +1,5 @@
 package com.example.demo.middleware;
+import com.example.demo.utils.CookieUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -25,7 +26,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        String token = jwtUtil.getTokenFromCookies(request);
+        String token = CookieUtil.getCookieValue(request, JwtUtil.TOKEN_NAME);
 
         if (token != null) {
             if (jwtUtil.validateToken(token) == null) {
