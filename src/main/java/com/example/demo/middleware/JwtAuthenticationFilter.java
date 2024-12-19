@@ -25,7 +25,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        String token = getTokenFromCookies(request);
+        String token = jwtUtil.getTokenFromCookies(request);
 
         if (token != null) {
             if (jwtUtil.validateToken(token) == null) {
@@ -44,17 +44,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private boolean isExcludedPath(String path) {
-        return path.equals("/api/auth/login") || path.equals("/api/auth/sign-up/job-seeker") || path.equals("/api/auth/sign-up/job-poster");
-    }
-
-    private String getTokenFromCookies(HttpServletRequest request) {
-        if (request.getCookies() != null) {
-            for (Cookie cookie : request.getCookies()) {
-                if ("foundit_jwt".equals(cookie.getName())) {
-                    return cookie.getValue();
-                }
-            }
-        }
-        return null;
+        return path.startsWith("/api/auth");
     }
 }

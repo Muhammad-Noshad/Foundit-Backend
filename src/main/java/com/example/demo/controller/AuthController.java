@@ -12,6 +12,7 @@ import com.example.demo.utils.Body;
 import com.example.demo.utils.JwtUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -118,6 +119,43 @@ public class AuthController {
         userService.saveUser(user);
 
         return new ResponseEntity<>(new Body("User sign up successful!"), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/verify")
+    public ResponseEntity<?> verifyUser(HttpServletRequest request) {
+        String token = jwtUtil.getTokenFromCookies(request);
+
+        if(token == null) {
+            return new ResponseEntity<>(new Body("Token not found!"), HttpStatus.NO_CONTENT);
+        }
+
+        String email = jwtUtil.getEmailFromToken(token);
+        String password = jwtUtil.getPasswordFromToken(token);
+
+        if(email == null || password == null) {
+            return new ResponseEntity<>(new Body("Invalid token!"), HttpStatus.NO_CONTENT);
+        }
+
+        if(!userService.verifyUser(email, password)) {
+            return new ResponseEntity<>(new Body("Invalid token credentials!"), HttpStatus.NO_CONTENT);
+        }
+
+        User user = userService.findByEmail(email);
+
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletResponse response) {
+        Cookie cookie = new Cookie("foundit_jwt", null);
+        cookie.setMaxAge(0);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true);
+
+        response.addCookie(cookie);
+
+        return new ResponseEntity<>(new Body("Token deleted successfully!"), HttpStatus.OK);
     }
 }
 
