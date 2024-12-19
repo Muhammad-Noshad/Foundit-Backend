@@ -1,9 +1,10 @@
 package com.example.demo.config;
 
+import com.example.demo.middleware.JwtAuthenticationFilter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -12,8 +13,9 @@ import org.springframework.web.filter.CorsFilter;
 import java.util.Arrays;
 
 @Configuration
-@EnableWebSecurity
 public class CorsConfig {
+    @Autowired
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     public CorsFilter corsFilter() {
@@ -35,9 +37,10 @@ public class CorsConfig {
                 .cors()
                 .and()
                 .csrf().disable()
-                .authorizeRequests()
-                .requestMatchers("/api/auth/login", "/api/sign-up/job-seeker", "/api/sign-up/job-seeker").permitAll()
-                .anyRequest().authenticated();
+                .authorizeHttpRequests(authorize -> authorize
+                        .anyRequest().permitAll()
+                )
+                .addFilterAfter(jwtAuthenticationFilter, CorsFilter.class);
 
         return http.build();
     }
