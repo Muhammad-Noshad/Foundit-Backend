@@ -17,6 +17,8 @@ public class JwtUtil {
     private String SECRET_KEY;
     public final long EXPIRATION_TIME = 24 * 3600000;
 
+    public static final String TOKEN_NAME = "foundit_jwt";
+
     public String generateToken(String email, String password) {
         return Jwts.builder()
                 .setSubject(email)
@@ -62,7 +64,7 @@ public class JwtUtil {
     public String getTokenFromCookies(HttpServletRequest request) {
         if (request.getCookies() != null) {
             for (Cookie cookie : request.getCookies()) {
-                if ("foundit_jwt".equals(cookie.getName())) {
+                if (TOKEN_NAME.equals(cookie.getName())) {
                     return cookie.getValue();
                 }
             }

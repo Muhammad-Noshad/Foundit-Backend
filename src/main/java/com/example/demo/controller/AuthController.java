@@ -53,7 +53,7 @@ public class AuthController {
 
         String token = jwtUtil.generateToken(user.getEmail(), user.getPassword());
 
-        Cookie cookie = new Cookie("foundit_jwt", token);
+        Cookie cookie = new Cookie(JwtUtil.TOKEN_NAME, token);
         cookie.setHttpOnly(true);
         // Won't work for HTTP connections like localhost, only enable it after deployment
         // cookie.setSecure(true);
@@ -147,7 +147,7 @@ public class AuthController {
 
     @DeleteMapping("/logout")
     public ResponseEntity<?> logout(HttpServletResponse response) {
-        Cookie cookie = new Cookie("foundit_jwt", null);
+        Cookie cookie = new Cookie(JwtUtil.TOKEN_NAME, null);
         cookie.setMaxAge(0);
         cookie.setPath("/");
         cookie.setHttpOnly(true);
