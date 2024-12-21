@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "JobApplication")
 public class JobApplication {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer applicationId;
