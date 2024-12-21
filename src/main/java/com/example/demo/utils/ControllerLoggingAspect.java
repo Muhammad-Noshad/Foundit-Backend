@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 @Aspect
 @Component
 public class ControllerLoggingAspect {
-
     private static final Logger logger = LoggerFactory.getLogger(ControllerLoggingAspect.class);
 
     @Pointcut("within(@org.springframework.web.bind.annotation.RestController *)")
@@ -36,4 +35,3 @@ public class ControllerLoggingAspect {
         logger.error("{} - {} Error Occurred: {}", className, methodName, exception.getMessage());
     }
 }
-
