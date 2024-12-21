@@ -8,7 +8,6 @@ import sibApi.TransactionalEmailsApi;
 
 @Configuration
 public class SendInBlueConfig {
-
     @Value("${sendinblue.api.key}")
     private String apiKey;
 
