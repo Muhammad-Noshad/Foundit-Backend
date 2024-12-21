@@ -40,7 +40,7 @@ public class CorsConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .anyRequest().permitAll()
                 )
-                .addFilterAfter(jwtAuthenticationFilter, CorsFilter.class);
+                 .addFilterAfter(jwtAuthenticationFilter, CorsFilter.class);
 
         return http.build();
     }

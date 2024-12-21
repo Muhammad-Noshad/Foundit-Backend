@@ -31,7 +31,7 @@ public class UserController {
     private Cloudinary cloudinary;
 
     @GetMapping("/{userId}")
-    private ResponseEntity<?> getUserById(@PathVariable Integer userId) {
+    public ResponseEntity<?> getUserById(@PathVariable Integer userId) {
         Optional<User> user = userService.getUserById(userId);
 
         if(user.isEmpty()) {
