@@ -43,9 +43,6 @@ public class JobApplicationController {
             return new ResponseEntity<>(new Body("Job already applied!"), HttpStatus.UNAUTHORIZED);
         }
 
-        Map<String, Object> uploadResult = cloudinary.uploader().upload(cv.getBytes(), ObjectUtils.emptyMap());
-        String cvUrl = (String) uploadResult.get("secure_url");
-
         Optional<User> user = userService.getUserById(userId);
 
         if(user.isEmpty()) {
@@ -58,8 +55,10 @@ public class JobApplicationController {
             return new ResponseEntity<>(new Body("Posted Job not found!"), HttpStatus.NOT_FOUND);
         }
 
-        JobApplication jobApplication = new JobApplication(user.get(), postedJob.get(), cvUrl, additionalComments, "",
-                ApplicationStatus.Applied);
+        Map<String, Object> uploadResult = cloudinary.uploader().upload(cv.getBytes(), ObjectUtils.emptyMap());
+        String cvUrl = (String) uploadResult.get("secure_url");
+
+        JobApplication jobApplication = new JobApplication(user.get(), postedJob.get(), cvUrl, additionalComments, "", ApplicationStatus.Applied);
 
         jobApplicationService.saveJobApplication(jobApplication);
 

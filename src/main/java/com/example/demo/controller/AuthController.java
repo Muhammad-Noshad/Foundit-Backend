@@ -21,7 +21,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import jakarta.servlet.http.Cookie;
 
 import java.io.IOException;
 import java.util.Map;
@@ -36,9 +35,8 @@ public class AuthController {
     private CompanyService companyService;
     @Autowired
     private Cloudinary cloudinary;
-
     @Autowired
-    JwtUtil jwtUtil;
+    private JwtUtil jwtUtil;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid LoginRequest loginRequest, HttpServletResponse response) {
@@ -65,6 +63,7 @@ public class AuthController {
         }
 
         userService.saveUser(user);
+
         return new ResponseEntity<>(new Body("User sign up successful!"), HttpStatus.CREATED);
     }
 
@@ -74,20 +73,8 @@ public class AuthController {
             @RequestPart("userInfo") String userInfoString,
             @RequestPart("companyInfo") String companyInfoString) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
-        Map<String, String> userInfoMap = null;
-        Map<String, String> companyInfoMap = null;
-
-        try {
-            userInfoMap = objectMapper.readValue(userInfoString, new TypeReference<>() {
-            });
-            companyInfoMap = objectMapper.readValue(companyInfoString, new TypeReference<>() {
-            });
-
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(new Body("Error parsing user or company data: " + e.getMessage()), HttpStatus.BAD_REQUEST);
-        }
+        Map<String, String> userInfoMap = objectMapper.readValue(userInfoString, Map.class);
+        Map<String, String> companyInfoMap = objectMapper.readValue(companyInfoString, Map.class);
 
         if(userService.existsByEmail(userInfoMap.get("email"))) {
             return new ResponseEntity<>(new Body("User already exists!"), HttpStatus.CONFLICT);
