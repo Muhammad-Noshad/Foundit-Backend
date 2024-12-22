@@ -14,7 +14,6 @@ public class JwtUtil {
     @Value("${jwt.secret_key}")
     private String SECRET_KEY;
     public final long EXPIRATION_TIME = 24 * 3600000;
-
     public static final String TOKEN_NAME = "foundit_jwt";
 
     public String generateToken(String email, String password) {
