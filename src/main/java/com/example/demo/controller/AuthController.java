@@ -11,7 +11,6 @@ import com.example.demo.service.UserService;
 import com.example.demo.utils.Body;
 import com.example.demo.utils.CookieUtil;
 import com.example.demo.utils.JwtUtil;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
