@@ -13,8 +13,6 @@ public interface UserService {
 
     boolean existsByEmail(String email);
 
-    boolean verifyUser(String email, String password);
-
     User findByEmail(String email);
 
     boolean userExistsById(Integer userId);

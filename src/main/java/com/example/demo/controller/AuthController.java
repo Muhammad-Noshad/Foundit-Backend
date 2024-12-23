@@ -18,6 +18,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -36,6 +37,8 @@ public class AuthController {
     private Cloudinary cloudinary;
     @Autowired
     private JwtUtil jwtUtil;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid LoginRequest loginRequest, HttpServletResponse response) {
@@ -43,11 +46,11 @@ public class AuthController {
             return new ResponseEntity<>(new Body("User not found!"), HttpStatus.NOT_FOUND);
         }
 
-        if (!userService.verifyUser(loginRequest.getEmail(), loginRequest.getPassword())) {
+        User user = userService.findByEmail(loginRequest.getEmail());
+
+        if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
             return new ResponseEntity<>(new Body("Invalid email or password."), HttpStatus.UNAUTHORIZED);
         }
-
-        User user = userService.findByEmail(loginRequest.getEmail());
 
         String token = jwtUtil.generateToken(user.getEmail(), user.getPassword());
         CookieUtil.addCookie(response, JwtUtil.TOKEN_NAME, token);
@@ -60,6 +63,8 @@ public class AuthController {
         if (userService.existsByEmail(user.getEmail())) {
             return new ResponseEntity<>(new Body("User already exists!"), HttpStatus.CONFLICT);
         }
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         userService.saveUser(user);
 
@@ -82,7 +87,8 @@ public class AuthController {
         Map<String, Object> uploadResult = cloudinary.uploader().upload(companyLogo.getBytes(), ObjectUtils.emptyMap());
         String companyLogoUrl = (String) uploadResult.get("secure_url");
 
-        User user = new User(userInfoMap.get("firstName"), userInfoMap.get("lastName"), userInfoMap.get("email"), userInfoMap.get("password"), Role.Employer);
+        User user = new User(userInfoMap.get("firstName"), userInfoMap.get("lastName"), userInfoMap.get("email"),
+                passwordEncoder.encode(userInfoMap.get("password")), Role.Employer);
         Company company = new Company(companyInfoMap.get("companyName"), companyInfoMap.get("companyLocation"), companyLogoUrl, companyInfoMap.get("positionInCompany"));
 
         Optional<Company> companyExists = companyService.findByCompanyNameAndCompanyLocation(company.getCompanyName(), company.getCompanyLocation());
@@ -115,11 +121,15 @@ public class AuthController {
             return new ResponseEntity<>(new Body("Invalid token!"), HttpStatus.NO_CONTENT);
         }
 
-        if(!userService.verifyUser(email, password)) {
-            return new ResponseEntity<>(new Body("Invalid token credentials!"), HttpStatus.NO_CONTENT);
+        User user = userService.findByEmail(email);
+
+        if(user == null) {
+            return new ResponseEntity<>(new Body("User not found!"), HttpStatus.NOT_FOUND);
         }
 
-        User user = userService.findByEmail(email);
+        if(!password.equals(user.getPassword())) {
+            return new ResponseEntity<>(new Body("Invalid token credentials!"), HttpStatus.NO_CONTENT);
+        }
 
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
