@@ -50,6 +50,7 @@ public class UserController {
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, String> userInfoMap = null;
         Map<String, String> companyInfoMap = null;
+        System.out.println(userInfoString);
 
         try {
             userInfoMap = objectMapper.readValue(userInfoString, new TypeReference<>() {

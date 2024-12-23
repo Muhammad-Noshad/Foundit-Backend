@@ -85,7 +85,7 @@ public class JobApplicationController {
 
         jobApplicationService.deleteJobApplicationById(jobApplicationId);
 
-        return new ResponseEntity<>(new Body("Job Application deleted successfully!"), HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(new Body("Job Application deleted successfully!"), HttpStatus.OK);
     }
 
     @PostMapping("/update-status")

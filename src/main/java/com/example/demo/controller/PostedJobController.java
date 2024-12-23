@@ -46,6 +46,6 @@ public class PostedJobController {
 
         postedJobService.deletePostedJobById(jobId);
 
-        return new ResponseEntity<>(new Body("Posted Job deleted successfully!"), HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(new Body("Posted Job deleted successfully!"), HttpStatus.OK);
     }
 }
