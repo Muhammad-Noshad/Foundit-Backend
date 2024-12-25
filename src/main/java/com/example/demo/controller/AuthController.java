@@ -49,7 +49,7 @@ public class AuthController {
         User user = userService.findByEmail(loginRequest.getEmail());
 
         if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-            return new ResponseEntity<>(new Body("Invalid email or password."), HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(new Body("Invalid password."), HttpStatus.UNAUTHORIZED);
         }
 
         String token = jwtUtil.generateToken(user.getEmail(), user.getPassword());
