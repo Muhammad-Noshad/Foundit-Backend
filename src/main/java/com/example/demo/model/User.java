@@ -45,7 +45,7 @@ public class User {
     @Valid
     private Company company;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @Valid
     private Set<JobApplication> jobApplications;
 
