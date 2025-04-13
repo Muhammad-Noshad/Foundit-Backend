@@ -19,28 +19,28 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String path = request.getRequestURI();
-
-        if (isExcludedPath(path)) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-        String token = CookieUtil.getCookieValue(request, JwtUtil.TOKEN_NAME);
-
-        if (token != null) {
-            if (jwtUtil.validateToken(token) == null) {
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.getWriter().write("Invalid or expired token");
-                return;
-            }
-        }
-        else {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().write("Token missing");
-            return;
-        }
-
         filterChain.doFilter(request, response);
+//        if (isExcludedPath(path)) {
+//            filterChain.doFilter(request, response);
+//            return;
+//        }
+//
+//        String token = CookieUtil.getCookieValue(request, JwtUtil.TOKEN_NAME);
+//
+//        if (token != null) {
+//            if (jwtUtil.validateToken(token) == null) {
+//                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+//                response.getWriter().write("Invalid or expired token");
+//                return;
+//            }
+//        }
+//        else {
+//            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+//            response.getWriter().write("Token missing");
+//            return;
+//        }
+//
+//        filterChain.doFilter(request, response);
     }
 
     private boolean isExcludedPath(String path) {
