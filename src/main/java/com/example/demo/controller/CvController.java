@@ -151,7 +151,6 @@ public class CvController {
 
 
 
-
     @PostMapping("/addExperience")
     public ResponseEntity<?> addExperience(@RequestBody CvExperienceRequest experienceRequest) {
         if (cvService.cvExists(experienceRequest.getCvID())) {
@@ -177,8 +176,6 @@ public class CvController {
         }
         return ResponseEntity.status(HttpStatus.SC_NOT_FOUND).body("Experience ID not found.");
     }
-
-
 
 
 
@@ -208,8 +205,6 @@ public class CvController {
         }
         return ResponseEntity.status(HttpStatus.SC_NOT_FOUND).body("Certificate ID not found.");
     }
-
-
 
 
 
