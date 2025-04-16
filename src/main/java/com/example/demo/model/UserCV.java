@@ -16,6 +16,10 @@ public class UserCV {
 
     private String address;
 
+    private String phone;
+
+    private String email;
+
     @Column(length = 1000)
     private String executiveSummary;
 
@@ -39,6 +43,11 @@ public class UserCV {
     @JsonManagedReference
     private List<CvProjects> projects = new ArrayList<>();
 
+
+    @OneToMany(mappedBy = "userCV", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<CvSkills> skills = new ArrayList<>();
+
     @OneToOne
     @MapsId
     @JoinColumn(name = "id", foreignKey = @ForeignKey(name = "fk_user_cv"))
@@ -48,9 +57,11 @@ public class UserCV {
 
     public UserCV() {}
 
-    public UserCV(String name, String address, String executiveSummary, User user) {
+    public UserCV(String name, String address, String phone, String email, String executiveSummary, User user) {
         this.name = name;
         this.address = address;
+        this.phone = phone;
+        this.email = email;
         this.executiveSummary = executiveSummary;
         this.user = user;
     }
@@ -138,4 +149,27 @@ public class UserCV {
         this.projects = projects;
     }
 
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public List<CvSkills> getSkills() {
+        return skills;
+    }
+
+    public void setSkills(List<CvSkills> skills) {
+        this.skills = skills;
+    }
 }

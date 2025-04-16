@@ -16,7 +16,7 @@ import java.util.Optional;
 public class CvServiceImpl implements CvService {
 
     @Autowired
-    UserCVRepository userCvRepository ;
+    UserCVRepository userCvRepository;
 
     @Autowired
     UserRepository userRepository;
@@ -35,6 +35,9 @@ public class CvServiceImpl implements CvService {
 
     @Autowired
     CvProjectsRepository cvProjectsRepository;
+
+    @Autowired
+    CvSkillsRepository cvSkillsRepository;
 
 
     @Override
@@ -85,7 +88,37 @@ public class CvServiceImpl implements CvService {
     }
 
     @Override
-    public UserCV createNewCv(Integer userId, String name, String address, String summary) {
+    public void updateEmail(Integer cvId, String email) {
+        Optional<UserCV> userCVOptional = userCvRepository.findById(cvId);
+
+        if (userCVOptional.isPresent()) {
+            UserCV userCV = userCVOptional.get();
+
+            userCV.setEmail(email);
+
+            userCvRepository.save(userCV);
+        } else {
+            throw new RuntimeException("UserCV not found for id: " + cvId);
+        }
+    }
+
+    @Override
+    public void updatePhone(Integer cvId, String phone) {
+        Optional<UserCV> userCVOptional = userCvRepository.findById(cvId);
+
+        if (userCVOptional.isPresent()) {
+            UserCV userCV = userCVOptional.get();
+
+            userCV.setPhone(phone);
+
+            userCvRepository.save(userCV);
+        } else {
+            throw new RuntimeException("UserCV not found for id: " + cvId);
+        }
+    }
+
+    @Override
+    public UserCV createNewCv(Integer userId, String name, String address, String phone, String email, String summary) {
 
         User user = userRepository.findById(userId).orElseThrow(() ->
                 new IllegalArgumentException("User not found with ID: " + userId));
@@ -94,19 +127,19 @@ public class CvServiceImpl implements CvService {
             throw new IllegalStateException("CV already exists for this user");
         }
 
-        UserCV userCV = new UserCV(name, address, summary, user);
+        UserCV userCV = new UserCV(name, address, phone, email, summary, user);
 
         return userCvRepository.save(userCV);
     }
 
     @Override
-    public boolean cvExists(Integer cvID){
+    public boolean cvExists(Integer cvID) {
         return userCvRepository.existsById(cvID);
     }
 
 
     @Override
-    public Optional<UserCV> getCvByID(Integer cvID){
+    public Optional<UserCV> getCvByID(Integer cvID) {
         return userCvRepository.findById(cvID);
     }
 
@@ -164,8 +197,7 @@ public class CvServiceImpl implements CvService {
     }
 
     @Override
-    public boolean removeEducationByID(Integer educationID)
-    {
+    public boolean removeEducationByID(Integer educationID) {
         Optional<CvEducation> educationOptional = cvEducationRepository.findById(educationID);
 
         if (educationOptional.isPresent()) {
@@ -181,7 +213,6 @@ public class CvServiceImpl implements CvService {
         }
         return false;
     }
-
 
 
     @Override
@@ -201,8 +232,7 @@ public class CvServiceImpl implements CvService {
     }
 
     @Override
-    public boolean removeExperienceByID(Integer experienceID)
-    {
+    public boolean removeExperienceByID(Integer experienceID) {
         Optional<CvExperience> experienceOptional = cvExperienceRepository.findById(experienceID);
 
         if (experienceOptional.isPresent()) {
@@ -218,7 +248,6 @@ public class CvServiceImpl implements CvService {
         }
         return false;
     }
-
 
 
     @Override
@@ -238,8 +267,7 @@ public class CvServiceImpl implements CvService {
     }
 
     @Override
-    public boolean removeCertificateByID(Integer certificateID)
-    {
+    public boolean removeCertificateByID(Integer certificateID) {
         Optional<CvCertificates> certificateOptional = cvCertificatesRepository.findById(certificateID);
 
         if (certificateOptional.isPresent()) {
@@ -274,8 +302,7 @@ public class CvServiceImpl implements CvService {
     }
 
     @Override
-    public boolean removeProjectsByID(Integer projectID)
-    {
+    public boolean removeProjectsByID(Integer projectID) {
         Optional<CvProjects> projectsOptional = cvProjectsRepository.findById(projectID);
 
         if (projectsOptional.isPresent()) {
@@ -292,6 +319,43 @@ public class CvServiceImpl implements CvService {
         return false;
     }
 
+
+    @Override
+    public void addSkill(Integer cvID, List<CvSkills> skills)
+    {
+        Optional<UserCV> userCVOptional = userCvRepository.findById(cvID);
+
+        if (userCVOptional.isPresent()) {
+            UserCV userCv = userCVOptional.get();
+
+            for (CvSkills link : skills) {
+                link.setUserCV(userCv); // maintain bidirectional relationship
+                userCv.getSkills().add(link); // modify the original collection
+            }
+
+            userCvRepository.save(userCv);
+        }
+    }
+
+
+    @Override
+    public boolean removeSkillsByID(Integer skillID)
+    {
+        Optional<CvSkills> skillsOptional = cvSkillsRepository.findById(skillID);
+
+        if (skillsOptional.isPresent()) {
+            CvSkills skills = skillsOptional.get();
+            UserCV userCv = skills.getUserCV();  // Get the associated UserCV
+
+
+            userCv.getSkills().remove(skills);
+
+
+            userCvRepository.save(userCv);
+            return true;
+        }
+        return false;
+    }
 
 }
 
