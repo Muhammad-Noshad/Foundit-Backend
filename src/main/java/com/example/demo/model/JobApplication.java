@@ -2,6 +2,9 @@ package com.example.demo.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -18,6 +21,7 @@ public class JobApplication {
 
     @ManyToOne
     @JoinColumn(name = "JobId", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull(message = "Job must be specified")
     private PostedJob postedJob;
 

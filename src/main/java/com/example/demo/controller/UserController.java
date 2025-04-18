@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -44,6 +45,24 @@ public class UserController {
         return new ResponseEntity<>(user.get(), HttpStatus.OK);
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllUsers() {
+        List<User> users = userService.getAllUsers();
+
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<?> deleteUserById(@PathVariable Integer userId) {
+        if (!userService.userExistsById(userId)) {
+            return new ResponseEntity<>(new Body("User does not exist!"), HttpStatus.NOT_FOUND);
+        }
+
+        userService.deleteUserById(userId);
+
+        return new ResponseEntity<>(new Body("User deleted successfully!"), HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<?> editUser(
             @RequestPart("user") String userInfoString,
@@ -61,7 +80,6 @@ public class UserController {
             companyInfoMap = objectMapper.readValue(companyInfoString, new TypeReference<>() {
             });
             }
-
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -86,8 +104,19 @@ public class UserController {
 
         String newPassword = existingUser.get().getPassword().equals(userInfoMap.get("password")) ? userInfoMap.get("password") : passwordEncoder.encode(userInfoMap.get("password"));
 
-        User user = new User(userInfoMap.get("firstName"), userInfoMap.get("lastName"), userInfoMap.get("email"), newPassword,
-                userInfoMap.get("role").equals("Employer")? Role.Employer: Role.JobSeeker);
+        User user = new User(userInfoMap.get("firstName"), userInfoMap.get("lastName"), userInfoMap.get("email"),
+                newPassword, Role.JobSeeker);
+
+        if (userInfoMap.get("role").equals("Employer")) {
+            user.setRole(Role.Employer);
+        }
+        else if (userInfoMap.get("role").equals("JobSeeker")) {
+            user.setRole(Role.JobSeeker);
+        }
+        else {
+            user.setRole(Role.Admin);
+        }
+
         user.setUserId(Integer.parseInt(userInfoMap.get("userId")));
 
         Company company = null;
