@@ -55,7 +55,7 @@ public class CvController {
     }
 
 
-    @PostMapping("/updateCvName")
+    @PutMapping("/updateCvName")
     public ResponseEntity<?>  updateCvName(@RequestParam("name") String name,
                                            @RequestParam("cvID") int cvID)
     {
@@ -68,7 +68,7 @@ public class CvController {
     }
 
 
-    @PostMapping("/updateCvAddress")
+    @PutMapping("/updateCvAddress")
     public ResponseEntity<?>  updateCvAddress(@RequestParam("address") String address,
                                            @RequestParam("cvID") int cvID)
     {
@@ -83,7 +83,7 @@ public class CvController {
 
 
 
-    @PostMapping("/updateCvSummary")
+    @PutMapping("/updateCvSummary")
     public ResponseEntity<?>  updateCvSummary(@RequestParam("summary") String summary,
                                               @RequestParam("cvID") int cvID)
     {
@@ -97,7 +97,7 @@ public class CvController {
 
 
 
-    @PostMapping("/updateCvEmail")
+    @PutMapping("/updateCvEmail")
     public ResponseEntity<?>  updateCvEmail(@RequestParam("email") String email,
                                               @RequestParam("cvID") int cvID)
     {
@@ -110,7 +110,7 @@ public class CvController {
     }
 
 
-    @PostMapping("/updateCvPhone")
+    @PutMapping("/updateCvPhone")
     public ResponseEntity<?>  updateCvPhone(@RequestParam("phone") String phone,
                                             @RequestParam("cvID") int cvID)
     {
