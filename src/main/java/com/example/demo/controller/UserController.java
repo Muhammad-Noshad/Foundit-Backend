@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.example.demo.model.Company;
+import com.example.demo.model.PostedJob;
 import com.example.demo.model.Role;
 import com.example.demo.model.User;
 import com.example.demo.service.CompanyService;
@@ -132,4 +133,21 @@ public class UserController {
 
         return new ResponseEntity<>(new Body("User edited successfully!"), HttpStatus.OK);
     }
+
+
+
+
+    @GetMapping("/relatedJobs/{userId}")
+    public ResponseEntity<?> getJobsRelatedToUserSkills(@PathVariable Integer userId) {
+        List<PostedJob> matchedJobs = userService.findJobsRelatedToUserSkills(userId);
+
+        if (matchedJobs.isEmpty()) {
+            return new ResponseEntity<>(new Body("No matching jobs found for the user's skills."), HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(matchedJobs, HttpStatus.OK);
+    }
+
+
+
 }

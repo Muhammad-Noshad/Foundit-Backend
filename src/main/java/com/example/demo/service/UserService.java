@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.model.PostedJob;
 import com.example.demo.model.User;
 import org.springframework.stereotype.Service;
 
@@ -23,4 +24,7 @@ public interface UserService {
     boolean userExistsById(Integer userId);
 
     Optional<User> getUserByCompanyId(Integer companyId);
+
+    List<PostedJob> findJobsRelatedToUserSkills(Integer userId);
+
 }
